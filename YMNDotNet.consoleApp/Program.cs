@@ -36,6 +36,33 @@ while (reader.Read())
        Console.WriteLine(value: reader["Blogid"] + " " + reader["BlogTitle"] + " " + reader["BlogAuthor"] + " " + reader["BlogConent"]);
 }connection.Close();
 
+string connectionStr2 = "Data Source=.;Initial Catalog=YMNDotnet;User ID=sa;Password=ymn@123;";
+SqlConnection connection2 = new SqlConnection(connectionStr2);
+
+Console.WriteLine("Enter Blog Title:");
+string blogTitle = Console.ReadLine();
+Console.WriteLine("Enter Blog Author:");
+string blogAuthor = Console.ReadLine();
+Console.WriteLine("Enter Blog Content:");
+string blogContent = Console.ReadLine();
+
+
+connection2.Open();
+string query2 = $@"INSERT INTO [dbo].[Tbl_blog]
+           ([BlogTitle]
+           ,[BlogAuthor]
+           ,[BlogConent])
+     VALUES
+           ('{blogTitle}'
+           ,'{blogAuthor}'
+           ,'{blogContent}')";
+
+SqlCommand cmd2 = new SqlCommand(cmdText: query2, connection2);
+int result = cmd2.ExecuteNonQuery();
+
+Console.WriteLine(result>1? "Insert Successfully":"Fail Insert");
+
+
 
 
 
