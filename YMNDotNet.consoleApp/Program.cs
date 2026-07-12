@@ -48,19 +48,33 @@ string blogContent = Console.ReadLine();
 
 
 connection2.Open();
+//string query2 = $@"INSERT INTO [dbo].[Tbl_blog]
+//           ([BlogTitle]
+//           ,[BlogAuthor]
+//           ,[BlogConent])
+//     VALUES
+//           ('{blogTitle}'
+//           ,'{blogAuthor}'
+//           ,'{blogContent}')";
+
 string query2 = $@"INSERT INTO [dbo].[Tbl_blog]
            ([BlogTitle]
            ,[BlogAuthor]
            ,[BlogConent])
      VALUES
-           ('{blogTitle}'
-           ,'{blogAuthor}'
-           ,'{blogContent}')";
+           (@BlogTitle
+           ,@BlogAuthor
+           ,@BlogConent)";
+
 
 SqlCommand cmd2 = new SqlCommand(cmdText: query2, connection2);
+cmd2.Parameters.AddWithValue("@BlogTitle", blogTitle);
+cmd2.Parameters.AddWithValue("@BlogAuthor", blogAuthor);
+cmd2.Parameters.AddWithValue("@BlogConent", blogContent);
 int result = cmd2.ExecuteNonQuery();
 
-Console.WriteLine(result>1? "Insert Successfully":"Fail Insert");
+Console.WriteLine(result>0? "Insert Successfully":"Fail Insert");
+connection2.Close();
 
 
 
