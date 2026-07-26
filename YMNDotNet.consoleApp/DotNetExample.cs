@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace YMNDotNet.consoleApp
 {
     public class DotNetExample
     {
-        private readonly string _connectionString = "Data Source=.;Initial Catalog=YMNDotnet;User ID=sa;Password=ymn@123;";
+        private readonly string _connectionString = "Data Source=.;Initial Catalog=YMNDotnet;User ID=sa;Password=9@1@84;";
         public void Read()
         {
             SqlConnection connection = new SqlConnection(_connectionString);
@@ -21,7 +22,8 @@ namespace YMNDotNet.consoleApp
                                   ,[BlogTitle]
                                   ,[BlogAuthor]
                                   ,[BlogConent]
-                              FROM [dbo].[Tbl_blog]";
+                              FROM [dbo].[Tbl_blog]
+                              WHERE DeletedFlag=0";
             SqlCommand cmd = new SqlCommand(cmdText: query, connection);
             /*SqlDataAdapter adapter = new SqlDataAdapter(selectCommand: cmd);
             DataTable dt = new DataTable();
@@ -104,7 +106,7 @@ namespace YMNDotNet.consoleApp
             cmd.Parameters.AddWithValue("@blogId", blogId);
             SqlDataReader reader = cmd.ExecuteReader();
 
-            foreach (reader.Read())
+            while (reader.Read())
             {
                 Console.WriteLine(reader["BlogId"]);
                 Console.WriteLine(reader["BlogTitle"]);
@@ -112,7 +114,72 @@ namespace YMNDotNet.consoleApp
                 Console.WriteLine(reader["BlogConent"]);
 
             }
-            connection.Close();    
+            connection.Close();
+            Console.WriteLine("Enter 1:For Title,2:For Author,3:For Blog Content!");
+            string editCate = Console.ReadLine();
+            SqlConnection connection2 = new SqlConnection(_connectionString);
+            connection2.Open();
+            switch (editCate)
+            {
+                case "1":
+                    Console.WriteLine("Enter Blog Title:");
+                    string blogTitle = Console.ReadLine();
+                    string query2 = $@"UPDATE [dbo].[Tbl_blog]
+                                       SET [BlogTitle] = @BlogTitle
+                                       WHERE BlogId=@BlogId";
+                    SqlCommand cmd2 = new SqlCommand(cmdText: query2, connection2);
+                    cmd2.Parameters.AddWithValue("@BlogTitle", blogTitle);
+                    cmd2.Parameters.AddWithValue("@BlogId", blogId);
+                    int result2 = cmd2.ExecuteNonQuery();
+                    Console.WriteLine(result2 > 0 ? "Update Successfully" : "Fail Update");
+                    break;
+                case "2":
+                    Console.WriteLine("Enter Blog Author:");
+                    string blogAuthor = Console.ReadLine();
+                    string query3 = $@"UPDATE [dbo].[Tbl_blog]
+                                       SET [BlogAuthor] = @BlogAuthor
+                                       WHERE BlogId=@BlogId";
+                    SqlCommand cmd3 = new SqlCommand(cmdText: query3, connection2);
+                    cmd3.Parameters.AddWithValue("@BlogAuthor", blogAuthor);
+                    cmd3.Parameters.AddWithValue("@BlogId", blogId);
+                    int result3 = cmd3.ExecuteNonQuery();
+                    Console.WriteLine(result3 > 0 ? "Update Successfully" : "Fail Update");
+                    break;
+                case "3":
+                    Console.WriteLine("Enter Blog Title:");
+                    string blogContent = Console.ReadLine();
+                    string query4 = $@"UPDATE [dbo].[Tbl_blog]
+                                       SET [BlogConent] = @BlogContent
+                                       WHERE BlogId=@BlogId";
+                    SqlCommand cmd4 = new SqlCommand(cmdText: query4, connection2);
+                    cmd4.Parameters.AddWithValue("@BlogContent", blogContent);
+                    cmd4.Parameters.AddWithValue("@BlogId", blogId);
+                    int result4 = cmd4.ExecuteNonQuery();
+                    Console.WriteLine(result4 > 0 ? "Update Successfully" : "Fail Update");
+                    break;
+
+            }
+
+            connection2.Close();
+
         }
+        public void Delete()
+        {
+            Console.WriteLine("Enter the blog Id that you want to delete!");
+            string blogID = Console.ReadLine();
+
+            SqlConnection connection = new SqlConnection(_connectionString);
+            connection.Open();
+            string query = $@"UPDATE [dbo].[Tbl_blog]
+                               SET [DeletedFlag] = 1
+                             WHERE BlogID = @BlogId";
+            SqlCommand cmd = new SqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("BlogId", blogID);
+            int result = cmd.ExecuteNonQuery();
+            Console.WriteLine(result > 0 ? "Successfully Deleted!": "Fail To Delete");
+            connection.Close();
+
+        }
+
     }
 }
