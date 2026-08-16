@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YMNDotNet.consoleApp.Models;
 
 namespace YMNDotNet.consoleApp
 {
@@ -22,5 +23,34 @@ namespace YMNDotNet.consoleApp
             }
 
         }
+
+        public void Create() {
+            AppDbContext db = new AppDbContext();
+
+            Console.WriteLine("Enter Blog Title");
+            string title = Console.ReadLine();
+
+            Console.WriteLine("Enter Blog Author");
+            string author = Console.ReadLine();
+
+            Console.WriteLine("Enter Blog Content");
+            string content = Console.ReadLine();
+
+            BlogDataModel blog = new BlogDataModel
+            {
+                BlogTitle = title,
+                BlogAuthor = author,
+                BlogConent = content,
+                DeletedFlag = false
+            };
+            db.Blogs.Add(blog);
+            int result = db.SaveChanges();
+            Console.WriteLine(result > 0 ? "Insert Successfully!" : "Fail to Insert!");
+
+
+
+        }
+
+
     }
 }
