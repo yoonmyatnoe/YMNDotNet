@@ -163,6 +163,7 @@ namespace YMNDotNet.consoleApp
             connection2.Close();
 
         }
+        
         public void Delete()
         {
             Console.WriteLine("Enter the blog Id that you want to delete!");

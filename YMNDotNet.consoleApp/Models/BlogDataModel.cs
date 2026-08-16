@@ -36,6 +36,6 @@ namespace YMNDotNet.consoleApp.Models
         public string BlogConent { get; set; }
 
         [Column("DeletedFlag")]
-        public long DeletedFlag { get; set; }
+        public Boolean DeletedFlag { get; set; }
     }
 }

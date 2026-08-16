@@ -11,7 +11,17 @@ using YMNDotNet.consoleApp;
 
 DotNetExample dotNetExample = new DotNetExample();
 //dotNetExample.Read();
-dotNetExample.Edit();
+//dotNetExample.Create();
+//dotNetExample.Edit();
+//dotNetExample.Delete();
+
+//DapperExample dapperExample = new DapperExample();
+//dapperExample.Read();
+//dapperExample.Create();
+
+EFCoreExample eFCoreExample = new EFCoreExample();
+//eFCoreExample.Read();
+eFCoreExample.Create();
 
 
 
